@@ -1,6 +1,4 @@
-# Build with:
-# docker build -t ogrisel/openblas .
-
+# Base
 FROM ubuntu:14.04
 
 # System
@@ -35,8 +33,7 @@ RUN apt-get install -y gcc
 RUN apt-get install -y python2.7 python2.7-dev python-pip
 RUN apt-get install -y python-setuptools
 
-
-# ### Python packages
+# Python packages
 # Numpy Scipy scikit-learn
 # From Olivier Grisel for good open blas action :)
 # https://github.com/ogrisel/docker-sklearn-openblas
@@ -70,7 +67,10 @@ RUN curl -sL --retry 3 \
   | tar x -C /usr/ \
   && ln -s $SPARK_HOME /usr/spark
 
-  
+
+# Clean and Reduce image size
+RUN apt-get autoremove -y
+RUN apt-get clean -y
 
 
 #
