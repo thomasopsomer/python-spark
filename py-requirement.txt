@@ -1,0 +1,11 @@
+gensim
+luigi
+spacy
+begins
+pymongo
+boto
+cython
+lxml
+flask
+celery
+nltk
