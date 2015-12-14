@@ -9,8 +9,8 @@ set -xe
 mkdir /tmp/build
 cd /tmp/build
 
-apt-get -y update
-apt-get -y install git-core build-essential gfortran
+# apt-get -y update
+# apt-get -y install git-core build-essential gfortran
 
 # Build latest stable release from OpenBLAS from source
 git clone -q --branch=master git://github.com/xianyi/OpenBLAS.git
@@ -24,9 +24,9 @@ git clone -q --branch=master git://github.com/xianyi/OpenBLAS.git
 ldconfig
 
 #Minimize image size (gfortran is needed at runtime)
-apt-get remove -y --purge git-core build-essential
-apt-get autoremove -y
-apt-get clean -y
+# # apt-get remove -y --purge git-core build-essential
+# apt-get autoremove -y
+# apt-get clean -y
 
 cd /
 rm -rf /tmp/build

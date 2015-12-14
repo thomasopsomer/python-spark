@@ -28,9 +28,9 @@ pip install git+git://github.com/scikit-learn/scikit-learn.git
 
 # Reduce the image size
 # pip3 uninstall -y cython
-apt-get remove -y --purge git-core build-essential python-dev
-apt-get autoremove -y
-apt-get clean -y
+# apt-get remove -y --purge git-core build-essential python-dev
+# apt-get autoremove -y
+# apt-get clean -y
 
 cd /
 rm -rf /tmp/build

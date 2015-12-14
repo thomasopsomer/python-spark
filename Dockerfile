@@ -3,6 +3,7 @@ FROM ubuntu:14.04
 
 # System
 RUN apt-get -y update \
+  && apt-get upgrade -y \
   && apt-get -y install git-core build-essential gfortran \
   && apt-get install -y --no-install-recommends software-properties-common
 
@@ -29,9 +30,12 @@ ADD ./src/openblas/build_openblas.sh build_openblas.sh
 RUN bash build_openblas.sh
 
 # Install python
-RUN apt-get install -y gcc
-RUN apt-get install -y python2.7 python2.7-dev python-pip
-RUN apt-get install -y python-setuptools
+RUN apt-get -y update
+RUN apt-get install -y \
+  python2.7 \
+  python2.7-dev \
+  python-pip \
+  python-setuptools
 
 # Python packages
 # Numpy Scipy scikit-learn
@@ -46,7 +50,7 @@ RUN apt-get install -y libxml2-dev libxslt1-dev \
   && apt-get install -y python-lxml
 # Other via pip and requirements file
 # add g++ for spacy
-RUN apt-get install -y g++
+# RUN apt-get install -y g++
 ADD ./py-requirement.txt py-requirement.txt
 RUN pip install -r py-requirement.txt
 
@@ -71,25 +75,3 @@ RUN curl -sL --retry 3 \
 # Clean and Reduce image size
 RUN apt-get autoremove -y
 RUN apt-get clean -y
-
-
-#
-# # Define working directory.
-# WORKDIR /data
-#
-
-#
-
-#
-# # Install scala
-#
-#
-# # Install scikit learn
-# ADD ./numpy-scipy/numpy-site.cfg numpy-site.cfg
-# ADD ./numpy-scipy/scipy-site.cfg scipy-site.cfg
-# ADD ./numpy-scipy/build_sklearn.sh build_sklearn.sh
-# RUN bash build_sklearn.sh
-#
-#
-# # Define default command.
-# CMD ["bash"]
