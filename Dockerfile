@@ -53,6 +53,9 @@ RUN apt-get install -y libxml2-dev libxslt1-dev \
 # RUN apt-get install -y g++
 ADD ./py-requirement.txt py-requirement.txt
 RUN pip install -r py-requirement.txt
+# Download NLTK and Spacy model
+RUN python -m nltk.downloader punkt
+RUN python -m spacy.en.download --force all
 
 # curl
 RUN apt-get install -y curl
@@ -61,7 +64,7 @@ RUN apt-get install -y curl
 # from https://github.com/gettyimages/docker-spark/blob/master/Dockerfile
 # SPARK
 ENV SPARK_VERSION 1.5.2
-ENV HADOOP_VERSION 2.6
+ENV HADOOP_VERSION 2.4
 ENV SPARK_PACKAGE $SPARK_VERSION-bin-hadoop$HADOOP_VERSION
 ENV SPARK_HOME /usr/spark-$SPARK_PACKAGE
 ENV PATH $PATH:$SPARK_HOME/bin
@@ -70,8 +73,16 @@ RUN curl -sL --retry 3 \
   | gunzip \
   | tar x -C /usr/ \
   && ln -s $SPARK_HOME /usr/spark
+# ADD jars for S3 : aws-java-sdk-1.7.4.jar && 
+RUN mkdir $SPARK_HOME/jars \
+  wget http://central.maven.org/maven2/com/amazonaws/aws-java-sdk/1.7.4/aws-java-sdk-1.7.4.jar \
+    http://central.maven.org/maven2/org/apache/hadoop/hadoop-aws/2.7.1/hadoop-aws-2.7.1.jar \
+  | mv $SPARK_HOME/jars/
 
+# Add conf file
+ADD ./src/spark/spark-default.conf $SPARK_HOME/conf/
 
 # Clean and Reduce image size
 RUN apt-get autoremove -y
 RUN apt-get clean -y
+
