@@ -64,7 +64,7 @@ RUN apt-get install -y curl
 # from https://github.com/gettyimages/docker-spark/blob/master/Dockerfile
 # SPARK
 ENV SPARK_VERSION 1.5.2
-ENV HADOOP_VERSION 2.4
+ENV HADOOP_VERSION 2.6
 ENV SPARK_PACKAGE $SPARK_VERSION-bin-hadoop$HADOOP_VERSION
 ENV SPARK_HOME /usr/spark-$SPARK_PACKAGE
 ENV PATH $PATH:$SPARK_HOME/bin
@@ -80,7 +80,7 @@ RUN mkdir $SPARK_HOME/jars \
   | mv $SPARK_HOME/jars/
 
 # Add conf file
-ADD ./src/spark/spark-default.conf $SPARK_HOME/conf/
+ADD ./src/spark/spark-default.conf $SPARK_HOME/conf/spark-default.conf
 
 # Clean and Reduce image size
 RUN apt-get autoremove -y
