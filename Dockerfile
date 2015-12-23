@@ -74,7 +74,7 @@ RUN curl -sL --retry 3 \
   | tar x -C /usr/ \
   && ln -s $SPARK_HOME /usr/spark
 # ADD jars for S3 : aws-java-sdk-1.7.4.jar && 
-RUN mkdir $SPARK_HOME/jars \
+RUN mkdir $SPARK_HOME/jars && \
   wget http://central.maven.org/maven2/com/amazonaws/aws-java-sdk/1.7.4/aws-java-sdk-1.7.4.jar \
     http://central.maven.org/maven2/org/apache/hadoop/hadoop-aws/2.7.1/hadoop-aws-2.7.1.jar \
   | mv $SPARK_HOME/jars/
