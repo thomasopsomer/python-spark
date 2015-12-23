@@ -15,8 +15,10 @@ cd /tmp/build
 # Build latest stable release from OpenBLAS from source
 git clone -q --branch=master git://github.com/xianyi/OpenBLAS.git
 (cd OpenBLAS \
+	&& make clean
     && make DYNAMIC_ARCH=1 NO_AFFINITY=1 NUM_THREADS=32 \
-    && make install)
+    && make install
+    # && make PREFIX=/tmp/build/OpenBLAS install)
 
 # Rebuild ld cache, this assumes that:
 # /etc/ld.so.conf.d/openblas.conf was installed by Dockerfile
