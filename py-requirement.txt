@@ -12,3 +12,6 @@ nltk
 pandas
 fabric
 boto3
+luigi-slack
+cassandra-driver
+progessbar

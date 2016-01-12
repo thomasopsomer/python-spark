@@ -9,7 +9,8 @@ FROM ubuntu:14.04
 RUN apt-get -y update \
   && apt-get upgrade -y \
   && apt-get -y install git-core build-essential gfortran curl \
-  && apt-get install -y --no-install-recommends software-properties-common
+  && apt-get install -y --no-install-recommends software-properties-common \
+  && apt-get install vim
 
 
 ###########################################################################
@@ -93,7 +94,7 @@ RUN mkdir -p $SPARK_HOME/jars && cd $_ \
     "http://central.maven.org/maven2/org/apache/hadoop/hadoop-aws/2.7.1/hadoop-aws-2.7.1.jar"
 
 # Add conf file
-ADD ./src/spark/spark-default.conf $SPARK_HOME/conf/spark-default.conf
+ADD ./src/spark/spark-defaults.conf $SPARK_HOME/conf/spark-defaults.conf
 
 
 ###########################################################################
