@@ -10,7 +10,7 @@ RUN apt-get -y update \
   && apt-get upgrade -y \
   && apt-get -y install git-core build-essential gfortran curl \
   && apt-get install -y --no-install-recommends software-properties-common \
-  && apt-get install vim
+  && apt-get install -y vim
 
 
 ###########################################################################
