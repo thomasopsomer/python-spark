@@ -14,4 +14,4 @@ fabric
 boto3
 luigi-slack
 cassandra-driver
-progessbar
+progressbar
