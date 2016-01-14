@@ -1,5 +1,5 @@
 gensim
-luigi
+git+https://github.com/spotify/luigi.git
 spacy
 begins
 pymongo
