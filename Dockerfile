@@ -59,8 +59,8 @@ ADD ./src/numpy-scipy/build_sklearn.sh build_sklearn.sh
 RUN bash build_sklearn.sh
 # lxml
 RUN apt-get install -y \
-  libxml2-dev
-  libxslt1-dev
+  libxml2-dev \
+  libxslt1-dev \
   python-lxml
 # Other via pip and requirements file & Download NLTK and Spacy model
 ADD ./py-requirement.txt py-requirement.txt
