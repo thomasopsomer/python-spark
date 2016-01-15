@@ -7,7 +7,6 @@ FROM ubuntu:14.04
 ###########################################################################
 
 RUN apt-get -y update \
-  && apt-get upgrade -y \
   && apt-get -y install git-core build-essential gfortran curl \
   && apt-get install -y --no-install-recommends software-properties-common \
   && apt-get install -y vim sqlite3
@@ -59,15 +58,16 @@ ADD ./src/numpy-scipy/scipy-site.cfg scipy-site.cfg
 ADD ./src/numpy-scipy/build_sklearn.sh build_sklearn.sh
 RUN bash build_sklearn.sh
 # lxml
-RUN apt-get install -y libxml2-dev libxslt1-dev \
-  && apt-get install -y python-lxml
-# Other via pip and requirements file
+RUN apt-get install -y \
+  libxml2-dev
+  libxslt1-dev
+  python-lxml
+# Other via pip and requirements file & Download NLTK and Spacy model
 ADD ./py-requirement.txt py-requirement.txt
-RUN pip install -r py-requirement.txt
-# Download NLTK and Spacy model
-RUN python -m nltk.downloader punkt \
+RUN pip install -r py-requirement.txt \
+  && python -m nltk.downloader punkt \
   && python -m spacy.en.download --force all
-
+  
 
 ###########################################################################
 # Install Spark
@@ -94,6 +94,13 @@ RUN mkdir -p $SPARK_HOME/jars \
 # Add conf file
 ADD ./src/spark/spark-defaults.conf $SPARK_HOME/conf/spark-defaults.conf
 
+
+###########################################################################
+# Init Script
+###########################################################################
+
+ADD setup.sh setup.sh
+ENTRYPOINT ["./setup.sh"]
 
 ###########################################################################
 # Clean and Reduce image size
