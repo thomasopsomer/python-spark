@@ -23,7 +23,6 @@ RUN \
   add-apt-repository -y ppa:webupd8team/java && \
   apt-get  update && \
   apt-get install -y oracle-java8-installer && \
-  rm -rf /var/lib/apt/lists/* && \
   rm -rf /var/cache/oracle-jdk8-installer
 
 # Define commonly used JAVA_HOME variable
@@ -45,7 +44,6 @@ RUN bash build_openblas.sh
 ###########################################################################
 
 # Python 2.7
-RUN apt-get -y update
 RUN apt-get install -y \
   python2.7 \
   python2.7-dev \
@@ -67,8 +65,8 @@ RUN apt-get install -y libxml2-dev libxslt1-dev \
 ADD ./py-requirement.txt py-requirement.txt
 RUN pip install -r py-requirement.txt
 # Download NLTK and Spacy model
-RUN python -m nltk.downloader punkt
-RUN python -m spacy.en.download --force all
+RUN python -m nltk.downloader punkt \
+  && python -m spacy.en.download --force all
 
 
 ###########################################################################
@@ -101,7 +99,8 @@ ADD ./src/spark/spark-defaults.conf $SPARK_HOME/conf/spark-defaults.conf
 # Clean and Reduce image size
 ###########################################################################
 
-RUN apt-get autoremove -y
-RUN apt-get clean -y
+RUN apt-get autoremove -y \
+  && apt-get clean -y \
+  && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 4040
