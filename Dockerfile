@@ -89,7 +89,8 @@ RUN curl -sL --retry 3 \
 RUN mkdir -p $SPARK_HOME/jars \
   && wget -P $SPARK_HOME/jars \
     "http://central.maven.org/maven2/com/amazonaws/aws-java-sdk/1.7.4/aws-java-sdk-1.7.4.jar" \
-    "http://central.maven.org/maven2/org/apache/hadoop/hadoop-aws/2.7.1/hadoop-aws-2.7.1.jar"
+    "http://central.maven.org/maven2/org/apache/hadoop/hadoop-aws/2.7.1/hadoop-aws-2.7.1.jar" \
+    "https://s3-us-west-2.amazonaws.com/ta-lib/directouputcommiter_2.10-1.0.jar"
 
 # Add conf file
 ADD ./src/spark/spark-defaults.conf $SPARK_HOME/conf/spark-defaults.conf
@@ -108,6 +109,7 @@ ENTRYPOINT ["./setup.sh"]
 
 RUN apt-get autoremove -y \
   && apt-get clean -y \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get remove -y --purge build-essential python-dev
 
 EXPOSE 4040
