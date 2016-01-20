@@ -2,7 +2,7 @@
 # @Author: ThomasO
 # @Date:   2016-01-15 12:24:57
 # @Last Modified by:   ThomasO
-# @Last Modified time: 2016-01-18 14:26:21
+# @Last Modified time: 2016-01-20 12:19:06
 
 set -e
 
@@ -98,6 +98,10 @@ if [ "$aws_access_key_id" != "" ] && [ "$aws_secret_access_key" != "" ]; then
 	# ENV
 	export AWS_ACCESS_KEY_ID=$aws_access_key_id
 	export AWS_SECRET_ACCESS_KEY=$aws_secret_access_key
+	echo "" >> ~/.bashrc
+	echo "# S3 Config" >> ~/.bashrc
+	echo "export AWS_ACCESS_KEY_ID=$aws_access_key_id" >> ~/.bashrc
+	echo "export AWS_SECRET_ACCESS_KEY=$aws_secret_access_key" >> ~/.bashrc
 fi
 
 # Mount instance storage and put docker folder on it
