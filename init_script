@@ -340,7 +340,6 @@ def set_S3_credentials(aws_access_key_id, aws_secret_access_key):
     # set as environment variables
     import subprocess
     subprocess.call(["export", "AWS_ACCESS_KEY_ID=%s" % aws_access_key_id])
-    subprocess.call(["export", "AWS_ACCESS_KEY_ID=%s" % aws_access_key_id])
     subprocess.call(["export", "AWS_SECRET_ACCESS_KEY=%s" % aws_secret_access_key])
     subprocess.call(["echo", "'' >> ~/.bashrc"])
     subprocess.call(["echo", "'# S3 Config' >> ~/.bashrc"])
