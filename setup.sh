@@ -2,7 +2,7 @@
 # @Author: ThomasO
 # @Date:   2016-01-15 12:24:57
 # @Last Modified by:   ThomasO
-# @Last Modified time: 2016-01-20 12:19:06
+# @Last Modified time: 2016-01-21 10:45:01
 
 set -e
 
@@ -18,7 +18,6 @@ function usage()
 	echo "  -h --help"
 	echo "  -a --aws-access-key-id"
 	echo "  -s --aws-secret-access-key"
-	echo "  -m --mount"
 	echo ""
 }
 
@@ -30,8 +29,8 @@ while [ "$1" != "" ]; do
 		-s | --aws-secret-access-key )		shift
 											aws_secret_access_key=$1
 											;;
-		-m | --mount )						mount=1
-											;;
+		# -m | --mount )						mount=1
+		# 									;;
 		-h | --help )                       usage
 											exit
 											;;
@@ -69,24 +68,6 @@ function write_hdfs_conf
 
 
 # ########################################################################
-# Mount Instance Storage on EC2 and change Docker Folder
-# https://forums.docker.com/t/how-do-i-change-the-docker-image-installation-directory/1169
-# ########################################################################
-
-function mount_disc_docker
-{
-	sudo mkfs.ext4 /dev/xvdb && \
-		mkdir /home/data/ && \
-		mount /dev/xvdb /home/data/
-	sudo service docker stop
-	sudo chmod -R 777 /var/lib/docker/
-	sudo mkdir /home/test/docker && \
-		mv /var/lib/docker /home/test/docker && \
-		ln -s /home/test/docker /var/lib/docker
-}
-
-
-# ########################################################################
 # Main
 # ########################################################################
 
@@ -102,11 +83,6 @@ if [ "$aws_access_key_id" != "" ] && [ "$aws_secret_access_key" != "" ]; then
 	echo "# S3 Config" >> ~/.bashrc
 	echo "export AWS_ACCESS_KEY_ID=$aws_access_key_id" >> ~/.bashrc
 	echo "export AWS_SECRET_ACCESS_KEY=$aws_secret_access_key" >> ~/.bashrc
-fi
-
-# Mount instance storage and put docker folder on it
-if [ "$mount" = "1" ]; then 
-	mount_disc_docker
 fi
 
 # stay in shell at the end
