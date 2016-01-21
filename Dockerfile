@@ -73,7 +73,7 @@ RUN mkdir /etc/luigi /var/log/luigid /etc/service/luigid
 ADD ./src/luigi/luigi.cfg /etc/luigi/client.cfg
 ADD ./src/luigi/logrotate.cfg /etc/logrotate.d/luigid
 ADD ./src/luigi/luigid.sh /etc/service/luigid/run
-VOLUME /var/log/luigid
+# VOLUME /var/log/luigid
 
 
 ###########################################################################
