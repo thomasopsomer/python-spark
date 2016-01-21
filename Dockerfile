@@ -1,5 +1,5 @@
 # Base
-FROM ubuntu:14.04
+FROM phusion/baseimage:0.9.15
 
 
 ###########################################################################
@@ -9,7 +9,7 @@ FROM ubuntu:14.04
 RUN apt-get -y update \
   && apt-get -y install git-core build-essential gfortran curl \
   && apt-get install -y --no-install-recommends software-properties-common \
-  && apt-get install -y vim sqlite3
+  && apt-get install -y sqlite3
 
 
 ###########################################################################
@@ -68,6 +68,13 @@ RUN pip install -r py-requirement.txt \
   && python -m nltk.downloader punkt \
   && python -m spacy.en.download --force all
   
+# Luigi setup
+RUN mkdir /etc/luigi /var/log/luigid /etc/service/luigid
+ADD ./src/luigi/luigi.cfg /etc/luigi/client.cfg
+ADD ./src/luigi/logrotate.cfg /etc/logrotate.d/luigid
+ADD ./src/luigi/luigid.sh /etc/service/luigid/run
+VOLUME /var/log/luigid
+
 
 ###########################################################################
 # Install Spark
@@ -97,11 +104,12 @@ ADD ./src/spark/spark-defaults.conf $SPARK_HOME/conf/spark-defaults.conf
 
 
 ###########################################################################
-# Init Script
+# Init Setup Script
 ###########################################################################
 
-ADD setup.sh setup.sh
-ENTRYPOINT ["./setup.sh"]
+ADD init_script init_script
+ENTRYPOINT ["./init_script"]
+
 
 ###########################################################################
 # Clean and Reduce image size
@@ -109,7 +117,8 @@ ENTRYPOINT ["./setup.sh"]
 
 RUN apt-get autoremove -y \
   && apt-get clean -y \
-  && rm -rf /var/lib/apt/lists/* \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
   && apt-get remove -y --purge build-essential python-dev
 
 EXPOSE 4040
+EXPOSE 8082
