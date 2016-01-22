@@ -35,9 +35,9 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 # # From Olivier Grisel : https://github.com/ogrisel/docker-openblas
 # ###########################################################################
 
-# ADD ./src/openblas/openblas.conf /etc/ld.so.conf.d/openblas.conf
-# ADD ./src/openblas/build_openblas.sh build_openblas.sh
-# RUN bash build_openblas.sh
+ADD ./src/openblas/openblas.conf /etc/ld.so.conf.d/openblas.conf
+ADD ./src/openblas/build_openblas.sh build_openblas.sh
+RUN bash build_openblas.sh
 
 
 # ###########################################################################

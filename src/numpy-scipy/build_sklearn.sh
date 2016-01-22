@@ -34,3 +34,4 @@ pip install git+git://github.com/scikit-learn/scikit-learn.git
 
 cd /
 rm -rf /tmp/build
+rm -rf build_sklearn.sh
