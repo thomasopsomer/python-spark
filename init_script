@@ -332,23 +332,20 @@ HDFS_TEMPLATE = """\
 def set_S3_credentials(aws_access_key_id, aws_secret_access_key):
     """ """
     # set for spark-hadoop-S3 communication via hdfs-site.xml config file
-    dest = os.pat.join(os.environ["SPARK_HOME"], "conf/hdfs-site.xml")
+    os.environ["AWS_ACCESS_KEY_ID"] = aws_access_key_id
+    os.environ["AWS_SECRET_ACCESS_KEY"] = aws_secret_access_key
+    dest = os.path.join(os.environ["SPARK_HOME"], "conf/hdfs-site.xml")
     content = HDFS_TEMPLATE % (aws_access_key_id, aws_secret_access_key)
-    with open(dest) as fout:
+    with open(dest, "w") as fout:
         fout.write(content)
-
-    # set as environment variables
-    import subprocess
-    subprocess.call(["export", "AWS_ACCESS_KEY_ID=%s" % aws_access_key_id])
-    subprocess.call(["export", "AWS_SECRET_ACCESS_KEY=%s" % aws_secret_access_key])
-    subprocess.call(["echo", "'' >> ~/.bashrc"])
-    subprocess.call(["echo", "'# S3 Config' >> ~/.bashrc"])
-    subprocess.call(["echo", "'export AWS_ACCESS_KEY_ID=%s' >> ~/.bashrc" % aws_access_key_id])
-    subprocess.call(["echo",
-                     "'export AWS_SECRET_ACCESS_KEY=%s' >> ~/.bashrc" % aws_secret_access_key])
 
 
 def main(args):
+    # S3 Credentials
+    if args.aws_access_key_id and args.aws_secret_access_key:
+        print(""" Setting AWS credentials ... """)
+        set_S3_credentials(args.aws_access_key_id, args.aws_secret_access_key)
+
     import_envvars(False, False)
     export_envvars()
 
@@ -400,10 +397,6 @@ def main(args):
                 stop_child_process("runit daemon", runit_pid)
             wait_for_runit_services()
 
-    # S3 Credentials
-    if args.aws_access_key_id and args.aws_secret_access_key:
-        set_S3_credentials(args.aws_access_key_id, args.aws_secret_access_key)
-
 
 # Parse options.
 parser = argparse.ArgumentParser(description='Initialize the system.')
@@ -424,9 +417,9 @@ parser.add_argument('--no-kill-all-on-exit', dest='kill_all_on_exit',
 parser.add_argument('--quiet', dest='log_level',
                     action='store_const', const=LOG_LEVEL_WARN, default=LOG_LEVEL_INFO,
                     help='Only print warnings and errors')
-parser.add_argument('-a', dest='aws_access_key_id', default=None,
+parser.add_argument('-a', dest='aws_access_key_id', default=None, type=str,
                     help='aws access key for S3 setup')
-parser.add_argument('-s', dest='aws_secret_access_key', default=None,
+parser.add_argument('-s', dest='aws_secret_access_key', default=None, type=str,
                     help='aws secret access key for S3 setup')
 
 args = parser.parse_args()
@@ -448,4 +441,3 @@ except KeyboardInterrupt:
 finally:
     if args.kill_all_on_exit:
         kill_all_processes(KILL_ALL_PROCESSES_TIMEOUT)
-#

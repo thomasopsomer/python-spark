@@ -5,10 +5,11 @@ FROM phusion/baseimage:0.9.15
 ###########################################################################
 # Regular system stuff
 ###########################################################################
-
+# deja in baseimage :
+#   - software-properties-common
+#   --no-install-recommends 
 RUN apt-get -y update \
-  && apt-get -y install git-core build-essential gfortran curl \
-  && apt-get install -y --no-install-recommends software-properties-common \
+  && apt-get -y install git-core build-essential gfortran \
   && apt-get install -y sqlite3
 
 
@@ -28,19 +29,19 @@ RUN \
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
 
-###########################################################################
-# Install good blas : OpenBlas
-# From Olivier Grisel : https://github.com/ogrisel/docker-openblas
-###########################################################################
+# ###########################################################################
+# # Install good blas : OpenBlas
+# # From Olivier Grisel : https://github.com/ogrisel/docker-openblas
+# ###########################################################################
 
-ADD ./src/openblas/openblas.conf /etc/ld.so.conf.d/openblas.conf
-ADD ./src/openblas/build_openblas.sh build_openblas.sh
-RUN bash build_openblas.sh
+# ADD ./src/openblas/openblas.conf /etc/ld.so.conf.d/openblas.conf
+# ADD ./src/openblas/build_openblas.sh build_openblas.sh
+# RUN bash build_openblas.sh
 
 
-###########################################################################
-# Python Environment
-###########################################################################
+# ###########################################################################
+# # Python Environment
+# ###########################################################################
 
 # Python 2.7
 RUN apt-get install -y \
@@ -118,7 +119,7 @@ ENTRYPOINT ["./init_script"]
 RUN apt-get autoremove -y \
   && apt-get clean -y \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-  && apt-get remove -y --purge build-essential python-dev
+  # && apt-get remove -y --purge build-essential python-dev
 
 EXPOSE 4040
 EXPOSE 8082
