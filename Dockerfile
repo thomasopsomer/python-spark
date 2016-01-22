@@ -10,6 +10,7 @@ FROM phusion/baseimage:0.9.15
 #   --no-install-recommends 
 RUN apt-get -y update \
   && apt-get -y install git-core build-essential gfortran \
+  && apt-get install -y --no-install-recommends software-properties-common \
   && apt-get install -y sqlite3
 
 
