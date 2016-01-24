@@ -5,9 +5,7 @@ FROM phusion/baseimage:0.9.15
 ###########################################################################
 # Regular system stuff
 ###########################################################################
-# deja in baseimage :
-#   - software-properties-common
-#   --no-install-recommends 
+
 RUN apt-get -y update \
   && apt-get -y install git-core build-essential gfortran \
   && apt-get install -y --no-install-recommends software-properties-common \
@@ -59,16 +57,16 @@ ADD ./src/numpy-scipy/numpy-site.cfg numpy-site.cfg
 ADD ./src/numpy-scipy/scipy-site.cfg scipy-site.cfg
 ADD ./src/numpy-scipy/build_sklearn.sh build_sklearn.sh
 RUN bash build_sklearn.sh
-# lxml
-RUN apt-get install -y \
-  libxml2-dev \
-  libxslt1-dev \
-  python-lxml
+# # lxml
+# RUN apt-get install -y \
+#   libxml2-dev \
+#   libxslt1-dev \
+#   python-lxml
 # Other via pip and requirements file & Download NLTK and Spacy model
 ADD ./py-requirement.txt py-requirement.txt
 RUN pip install -r py-requirement.txt \
-  && python -m nltk.downloader punkt \
-  && python -m spacy.en.download --force all
+  && python -m nltk.downloader punkt
+  # && python -m spacy.en.download --force all
   
 # Luigi setup
 RUN mkdir /etc/luigi /var/log/luigid /etc/service/luigid
@@ -120,7 +118,7 @@ ENTRYPOINT ["./init_script"]
 RUN apt-get autoremove -y \
   && apt-get clean -y \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-  # && apt-get remove -y --purge build-essential python-dev
+  && apt-get remove -y --purge build-essential python-dev
 
 EXPOSE 4040
 EXPOSE 8082
